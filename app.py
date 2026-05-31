@@ -19,7 +19,7 @@ st.markdown("---")
 st.sidebar.title("🔒 ACCESS CONTROL")
 theme_choice = st.sidebar.radio("SYSTEM THEME", ["🌌 MILITARY DARK", "☀️ OPERATIONAL LIGHT"])
 st.sidebar.success("SECURE CONNECTION: ACTIVE")
-st.sidebar.info("System auto-refreshing every 3 seconds...")
+st.sidebar.info("System auto-refreshing every 6 seconds...")
 
 # --- 🤖 1. NEW FEATURE: AI COMMAND CONTROL SYSTEM ---
 st.header("🧠 AI OMNI-CONTROL INTERFACE (JARVIS CORE)")
