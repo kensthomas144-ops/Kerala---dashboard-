@@ -11,6 +11,59 @@ st.set_page_config(
     layout="wide"
 )
 
+# 🎨 CUSTOM CSS FOR ADVANCED UI/UX (Sci-Fi Cyberpunk Look)
+st.markdown("""
+<style>
+    /* Main Background & Text Color */
+    .stApp {
+        background-color: #0B0F19;
+        color: #00FF66;
+        font-family: 'Courier New', Courier, monospace;
+    }
+    
+    /* Title and Subtitle Styling */
+    h1 {
+        color: #FF3333 !important;
+        text-shadow: 0 0 10px #FF3333, 0 0 20px #FF3333;
+        font-weight: bold;
+    }
+    h2, h3 {
+        color: #00E5FF !important;
+        text-shadow: 0 0 5px #00E5FF;
+    }
+    
+    /* Glowing Card Design for Containers */
+    div[data-testid="stVerticalBlock"] > div {
+        background: rgba(16, 24, 48, 0.85);
+        border: 1px solid #00E5FF;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    }
+    
+    /* Metric Widget Customize */
+    div[data-testid="stMetricValue"] {
+        font-size: 28px !important;
+        color: #00FF66 !important;
+        text-shadow: 0 0 5px #00FF66;
+    }
+    
+    /* Tabs Customization */
+    button[data-baseweb="tab"] {
+        color: #00E5FF !important;
+        border: 1px solid #00E5FF !important;
+        border-radius: 5px 5px 0 0;
+        background-color: #101830 !important;
+        margin-right: 5px;
+    }
+    button[aria-selected="true"] {
+        background-color: #FF3333 !important;
+        color: white !important;
+        box-shadow: 0 0 10px #FF3333;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # 🧠 SYSTEM MEMORY (Session State)
 if "shield_val" not in st.session_state:
     st.session_state.shield_val = 98
@@ -23,26 +76,24 @@ if "ai_msg" not in st.session_state:
 if "radar_angle" not in st.session_state:
     st.session_state.radar_angle = 0
 
-# റഡാർ സ്കാനിംഗ് ആനിമേഷൻ
 st.session_state.radar_angle = (st.session_state.radar_angle + 20) % 360
 
 st.title("🚨 KERALA CENTRAL COMMAND & SECURITY GRID")
-st.subheader("CHIEF MINISTER'S SECRET DEFENSE INTERFACE | LEVEL: OMNISCIENT")
+st.markdown("<h4 style='color:#00E5FF;'>CHIEF MINISTER'S SECRET DEFENSE INTERFACE | LEVEL: OMNISCIENT</h4>", unsafe_allow_html=True)
 st.markdown("---")
 
 # 🔒 SIDEBAR ACCESS
 st.sidebar.title("🔒 ACCESS CONTROL")
-theme_choice = st.sidebar.radio("SYSTEM THEME", ["🌌 MILITARY DARK", "☀️ OPERATIONAL LIGHT"])
 st.sidebar.success("SECURE CONNECTION: ACTIVE")
 st.sidebar.info("System auto-refreshing every 3 seconds...")
 
-# 🎛️ OMNI OPTIONS (TABS) - അഞ്ചാമത്തെ പുതിയ ടാബ് ആഡ് ചെയ്തിരിക്കുന്നു
+# 🎛️ OMNI OPTIONS (TABS)
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🧠 AI CORE INTELLIGENCE", 
     "🎛️ CENTRAL CONTROL PANEL", 
     "🛰️ GEOSPATIAL & RADAR", 
     "📊 SYSTEM METRICS & STATUS",
-    "🛸 TRANSIT & FLIGHT TRACKER"  # New Feature!
+    "🛸 TRANSIT & FLIGHT TRACKER"
 ])
 
 # ==========================================
@@ -185,7 +236,7 @@ with tab4:
     st.dataframe(status_data, use_container_width=True)
 
 # ==========================================
-# 🛸 NEW OPTION 5: TRANSIT & FLIGHT TRACKER (പുതിയ ഫീച്ചർ!)
+# 🛸 OPTION 5: TRANSIT & FLIGHT TRACKER
 # ==========================================
 with tab5:
     st.header("🛰️ REAL-TIME TRANSIT & FLIGHT TRACKING NETWORK")
@@ -195,16 +246,14 @@ with tab5:
     
     with col_track1:
         st.subheader("🚀 KALINGA ELEVATOR STATUS")
-        # ലിഫ്റ്റിന്റെ ഡയറക്ഷനും ലൊക്കേഷനും റാൻഡം ആയി മാറുന്നു
-        lift_direction = random.choice(["🔼 ASCENDING (മുകളിലോട്ട്)", "🔽 DESCENDING (താഴോട്ട്)"])
-        lift_location = random.choice(["Leaving Thiruvananthapuram Bunker", "Passing Stratosphere", "Docking at Space Station Alpha", "Approaching Meso-Core"])
+        lift_direction = random.choice(["🔼 ASCENDING", "🔽 DESCENDING"])
+        lift_location = random.choice(["Leaving Thiruvananthapuram Bunker", "Passing Stratosphere", "Docking at Space Station Alpha"])
         
         st.info(f"**CURRENT POSITION:** {lift_location}")
         st.metric(label="TRACKING DIRECTION", value=lift_direction, delta="VERTICAL PROPULSION ACTIVE")
         
     with col_track2:
         st.subheader("🛸 ACTIVE AIR POD LOGS")
-        # എയർ പോഡുകളുടെ ഡയറക്ഷൻ ടേബിൾ
         air_pod_data = pd.DataFrame({
             'AIR POD ID': ['POD-01 (VIP)', 'POD-02 (Cargo)', 'POD-03 (Scout)'],
             'DEPARTURE BASE': ['HQ: Thiruvananthapuram', 'Kochi Naval Grid', 'Kozhikode Air Base'],
@@ -215,6 +264,6 @@ with tab5:
         })
         st.dataframe(air_pod_data, use_container_width=True)
 
-# 🔄 3 സെക്കൻഡ് നിർത്തിയ ശേഷം പേജ് തനിയെ റീഫ്രെഷ് ചെയ്യാനുള്ള വിദ്യ
+# 🔄 3 സെക്കൻഡ് പേജ് തനിയെ റീഫ്രെഷ് ചെയ്യാനുള്ള വിദ്യ
 time.sleep(3)
 st.rerun()
