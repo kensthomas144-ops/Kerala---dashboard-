@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import time
 import random
 
 # Page Configuration
@@ -11,8 +10,8 @@ st.set_page_config(
     layout="wide"
 )
 
-# സുഗമമായ റീഫ്രെഷിങ്ങിനായി ചെറിയൊരു ഡിലേ
-time.sleep(0.5)
+# 🔄 പെർഫെക്റ്റ് ഓട്ടോ-റീഫ്രെഷ് വിദ്യ (ഓരോ 3 സെക്കൻഡിലും തനിയെ മാറും)
+st.fragment(run_every=3)
 
 st.title("🚨 KERALA CENTRAL COMMAND & SECURITY GRID")
 st.subheader("CHIEF MINISTER'S SECRET DEFENSE INTERFACE | LEVEL: OMNISCIENT")
@@ -44,6 +43,3 @@ map_data = pd.DataFrame({
     'lon': [76.9366, 76.2673, 75.7804]
 })
 st.map(map_data, zoom=6)
-
-# ഓട്ടോമാറ്റിക് റീഫ്രെഷ് ട്രിഗർ ചെയ്യാനുള്ള കമാൻഡ്
-st.rerun()
