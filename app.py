@@ -11,14 +11,15 @@ st.set_page_config(
     layout="wide"
 )
 
-# 🧠 SYSTEM MEMORY (Session State) 初始化
-# സ്ലൈഡറിന്റെയും ടോഗിളുകളുടെയും വാല്യൂസ് മെമ്മറിയിൽ സൂക്ഷിക്കുന്നു
+# 🧠 SYSTEM MEMORY (Session State)
 if "shield_val" not in st.session_state:
     st.session_state.shield_val = 98
 if "siren_val" not in st.session_state:
     st.session_state.siren_val = False
 if "laser_val" not in st.session_state:
     st.session_state.laser_val = True
+if "ai_msg" not in st.session_state:
+    st.session_state.ai_msg = "AI Core is listening... Status: STABLE"
 
 st.title("🚨 KERALA CENTRAL COMMAND & SECURITY GRID")
 st.subheader("CHIEF MINISTER'S SECRET DEFENSE INTERFACE | LEVEL: OMNISCIENT")
@@ -26,29 +27,37 @@ st.markdown("---")
 
 # 🤖 AI COMMAND CONTROL SYSTEM
 st.header("🧠 AI OMNI-CONTROL INTERFACE (JARVIS CORE)")
-ai_command = st.text_input("ENTER VOCAL/TEXT COMMAND FOR AI ASSTISTANT:", placeholder="e.g., activate shield, lockdown, standby")
 
-ai_status_message = "AI Core is listening... Status: STABLE"
+# ഈ ഫങ്ക്ഷൻ വഴി കമാൻഡ് റൺ ചെയ്ത ഉടൻ ഇൻപുട്ട് ബോക്സ് തനിയെ ക്ലിയർ ചെയ്യും
+def process_command():
+    raw_cmd = st.session_state.cmd_input
+    if raw_cmd:
+        cmd = raw_cmd.lower().strip()
+        if "shield" in cmd or "activate" in cmd:
+            st.session_state.shield_val = 100
+            st.session_state.laser_val = True
+            st.session_state.ai_msg = "🤖 AI: Executing Protocol 'Aegis'. Shield Maximized. Laser Grid Active."
+        elif "lockdown" in cmd or "danger" in cmd:
+            st.session_state.shield_val = 100
+            st.session_state.siren_val = True
+            st.session_state.laser_val = True
+            st.session_state.ai_msg = "🚨 AI: EMERGENCY LOCKDOWN ACTIVATED! Warning sirens blaring across all state grids!"
+        elif "standby" in cmd or "safe" in cmd:
+            st.session_state.shield_val = 50
+            st.session_state.siren_val = False
+            st.session_state.laser_val = False
+            st.session_state.ai_msg = "💤 AI: System entering power-saving standby mode. Grid on low-alert."
+        else:
+            st.session_state.ai_msg = f"🤖 AI: Command '{raw_cmd}' analyzed. No immediate action required."
+        
+        # കമാൻഡ് മെമ്മറിയിൽ എടുത്ത ശേഷം ബോക്സ് ഒഴിഞ്ഞതാക്കുന്നു
+        st.session_state.cmd_input = ""
 
-# യൂസർ കമാൻഡ് ടൈപ്പ് ചെയ്യുമ്പോൾ മെമ്മറിയിലെ വാല്യൂസ് ഓട്ടോമാറ്റിക് ആയി മാറ്റുന്നു
-if ai_command:
-    cmd = ai_command.lower().strip()
-    if "shield" in cmd or "activate" in cmd:
-        st.session_state.shield_val = 100
-        st.session_state.laser_val = True
-        ai_status_message = "🤖 AI: Executing Protocol 'Aegis'. Shield Maximized. Laser Grid Active."
-    elif "lockdown" in cmd or "danger" in cmd:
-        st.session_state.shield_val = 100
-        st.session_state.siren_val = True
-        st.session_state.laser_val = True
-        ai_status_message = "🚨 AI: EMERGENCY LOCKDOWN ACTIVATED! Warning sirens blaring across all state grids!"
-    elif "standby" in cmd or "safe" in cmd:
-        st.session_state.shield_val = 50
-        st.session_state.siren_val = False
-        st.session_state.laser_val = False
-        ai_status_message = "💤 AI: System entering power-saving standby mode. Grid on low-alert."
+# ഇൻപുട്ട് ബോക്സ് (on_change ഉപയോഗിച്ച് ഫങ്ക്ഷൻ കണക്ട് ചെയ്തിരിക്കുന്നു)
+st.text_input("ENTER VOCAL/TEXT COMMAND FOR AI ASSTISTANT:", placeholder="e.g., activate shield, lockdown, standby", key="cmd_input", on_change=process_command)
 
-st.info(ai_status_message)
+# നിലവിലെ AI മെസ്സേജ് കാണിക്കുന്നു
+st.info(st.session_state.ai_msg)
 st.markdown("---")
 
 # 🔒 സൈഡ്ബാർ സെറ്റിംഗ്സ്
@@ -57,23 +66,23 @@ theme_choice = st.sidebar.radio("SYSTEM THEME", ["🌌 MILITARY DARK", "☀️ O
 st.sidebar.success("SECURE CONNECTION: ACTIVE")
 st.sidebar.info("System auto-refreshing every 3 seconds...")
 
-# 🎛️ CENTRAL CONTROL SYSTEM PANEL (വാല്യൂസ് പൂർണ്ണമായും ഓട്ടോമാറ്റിക് ആണ്)
+# 🎛️ CENTRAL CONTROL SYSTEM PANEL
 st.header("🎛️ CENTRAL CONTROL SYSTEM PANEL")
 col_ctrl1, col_ctrl2 = st.columns(2)
 
 with col_ctrl1:
     st.subheader("⚡ Weapon & Shield Output")
-    # value ആയി സെഷൻ സ്റ്റേറ്റ് കൊടുത്തതിനാൽ ഇത് തനിയെ നീങ്ങും!
-    shield_power = st.slider("MANUAL SHIELD INTEGRITY OVERRIDE (%)", 0, 100, value=st.session_state.shield_val, key="shield_slider")
+    # സ്ലൈഡർ മെമ്മറിയുമായി സിങ്ക് ചെയ്തിരിക്കുന്നു
+    shield_power = st.slider("MANUAL SHIELD INTEGRITY OVERRIDE (%)", 0, 100, value=st.session_state.shield_val, key="shield_slider_manual")
     active_sector = st.selectbox("TACTICAL DRONE SECTOR", ["Sector Alpha (North)", "Sector Bravo (Central)", "Sector Gamma (South)"], key="sector_select")
 
 with col_ctrl2:
     st.subheader("🚨 System Status Toggle")
-    siren_on = st.toggle("📢 ACTIVATE EMERGENCY SIREN", value=st.session_state.siren_val, key="siren_toggle")
+    siren_on = st.toggle("📢 ACTIVATE EMERGENCY SIREN", value=st.session_state.siren_val, key="siren_toggle_manual")
     if siren_on:
         st.warning("🚨 EMERGENCY SIREN ACTIVATED IN ALL BASES! 🚨")
     
-    laser_grid = st.toggle("🛡️ LASER GRID DEFENSE SYSTEM", value=st.session_state.laser_val, key="laser_toggle")
+    laser_grid = st.toggle("🛡️ LASER GRID DEFENSE SYSTEM", value=st.session_state.laser_val, key="laser_toggle_manual")
     if laser_grid:
         st.success("🔒 LASER GRID IS ACTIVE AND LETHAL.")
     else:
